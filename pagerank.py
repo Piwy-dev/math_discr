@@ -31,9 +31,22 @@ def pageRankPower (A : np.matrix, alpha : float, v : np . array ) -> np.array:
     le même ordre que les lignes de la matrice d’adjacence (représentant les noeuds).
     """
     n = A.shape[0]
-    B = alpha*A + (1-alpha)*np.ones((n,n))/n
+    I = np.identity(n)
+
+    # Normalize the adjacency matrix
+    A_normalized = A / A.sum(axis=1)
+
+    # Initialize PageRank vector
     x = v
-    for i in range(100):
-        x = B@x
+
+    for _ in range(1000):
+        x_new = (1 - alpha) * (A_normalized.T @ x) + alpha * v
+
+        # Check for convergence
+        if np.linalg.norm(x_new - x, ord=1) < 1e-6:
+            break
+
+        x = x_new
+
     return x
 

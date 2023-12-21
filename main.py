@@ -4,9 +4,7 @@ import pagerank as pr
 
 def main():
     adjacence_mattrix = np.genfromtxt("data/adjacency_matrix.csv", delimiter=',', skip_header=1)
-    print(adjacence_mattrix)
     personalization_vector = np.genfromtxt("data/personalisation_vertor.csv", delimiter=',', skip_header=1)
-    print(personalization_vector)
     linear_result = pr.pageRankLinear(adjacence_mattrix, 0.9, personalization_vector)
     power_result = pr.pageRankPower(adjacence_mattrix, 0.9, personalization_vector)
     print(linear_result)
