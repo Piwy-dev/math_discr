@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def pageRankLinear (A : np.matrix , alpha : float, v : np.array ) -> np.array:
     """
     `A` : np.matrix : matrice d'adjacence
