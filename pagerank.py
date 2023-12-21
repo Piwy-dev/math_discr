@@ -48,9 +48,31 @@ def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
     # fait la somme de toutes les colonnes de M
     # print("M est stochastique : ", np.allclose(M.sum(axis=0), np.ones(n)))
 
-    # Calcul de la matrice Google G
-    G = alpha * P + (1 - alpha) * v
+    # Créetion du vecteur colonne e = (1, 1, ..., 1), de taille n
+    e = np.ones(n).reshape(n, 1)
+    
+    # Transpose v
+    vt = v.reshape(1, n)
+    evT = e @ vt
 
+    # Calcul de la matrice Google G
+    G = alpha * P + (1 - alpha) * evT
     print(G)
 
-    
+    # Création du vecteur de probabilité stationnaire x
+    x = np.ones(n)
+
+    # Transpose x : vecteur propre de G
+    xT = x.reshape(1, n)
+
+    # Calcul du vecteur de probabilité stationnaire x sur 3 itérations
+    x = np.ones(n).reshape(n, 1)
+    for i in range(3):
+        xT = xT @ G
+        print("x", x)
+
+    # Calcul du vecteur de probabilité stationnaire x sur 1000 itérations
+    for i in range(1000):
+        xT = xT @ G
+
+    return xT.reshape(n, 1)
