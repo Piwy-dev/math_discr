@@ -11,8 +11,15 @@ def pageRankLinear (A : np.matrix , alpha : float, v : np.array ) -> np.array:
     le même ordre que les lignes de la matrice d’adjacence (représentant les noeuds).
     """
     n = A.shape[0]
-    B = alpha*A + (1-alpha)*np.ones((n,n))/n
-    return np.linalg.solve(B,v)
+    I = np.identity(n)
+
+    # Calculate the transition matrix M
+    M = (1 - alpha) * A + alpha / n * np.ones((n, n))
+
+    # Solve the linear system to find the PageRank vector
+    x = np.linalg.solve(I - M, v)
+
+    return x
 
 def pageRankPower (A : np.matrix, alpha : float, v : np . array ) -> np.array:
     """

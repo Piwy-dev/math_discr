@@ -3,9 +3,15 @@ import pagerank as pr
 
 
 def main():
-    adjacence_mattrix = np.loadtxt("data/adjacency_matrix.csv", delimiter=',')
-    personalization_vector = np.loadtxt("data/personalisation_verctor.csv", delimiter=',')
+    adjacence_mattrix = np.genfromtxt("data/adjacency_matrix.csv", delimiter=',', skip_header=1)
+    print(adjacence_mattrix)
+    personalization_vector = np.genfromtxt("data/personalisation_vertor.csv", delimiter=',', skip_header=1)
+    print(personalization_vector)
     linear_result = pr.pageRankLinear(adjacence_mattrix, 0.9, personalization_vector)
     power_result = pr.pageRankPower(adjacence_mattrix, 0.9, personalization_vector)
-    print("Linear method: \n" + linear_result)
-    print("Power method: \n" + power_result)
+    print(linear_result)
+    print(power_result)
+
+
+if __name__ == '__main__':
+    main()
