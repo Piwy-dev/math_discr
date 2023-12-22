@@ -21,18 +21,13 @@ def pageRankLinear (A : np.matrix , alpha : float, v : np.array ) -> np.array:
 
     return x
 
-def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
+
+def probality_matrix(A: np.matrix) -> np.matrix:
     """
     `A` : np.matrix : matrice d'adjacence
-    `alpha` : float : paramètre de téléportation (entre 0 et 1)
-    `v` : np.array : vecteur de probabilité initiale
 
-    Retourne le vecteur de probabilité stationnaire du PageRank -> Un vecteur `x` contenant les scores d’importance des noeuds ordonnés dans
-    le même ordre que les lignes de la matrice d’adjacence (représentant les noeuds).
+    Retourne la matrice de probabilité de transition P.
     """
-    print(A)
-
-    # Création de la matrice de probabilité de transition P
     n = A.shape[0]
     P = np.zeros((n, n))
 
@@ -43,10 +38,24 @@ def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
                 Lj = A[:,j].sum() # Nombre de liens sortants de j
                 P[i,j] = A[i,j] / Lj
 
-    print(P)
+    return P
 
-    # fait la somme de toutes les colonnes de M
-    print("P est stochastique : ", np.allclose(P.sum(axis=0), np.ones(n)))
+
+def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
+    """
+    `A` : np.matrix : matrice d'adjacence
+    `alpha` : float : paramètre de téléportation (entre 0 et 1)
+    `v` : np.array : vecteur de probabilité initiale
+
+    Retourne le vecteur de probabilité stationnaire du PageRank -> Un vecteur `x` contenant les scores d’importance des noeuds ordonnés dans
+    le même ordre que les lignes de la matrice d’adjacence (représentant les noeuds).
+    """
+    print(A)
+    n = A.shape[0] # Nombre de noeuds
+
+    # Calcul de la matrice de probabilité de transition P
+    P = probality_matrix(A)
+    print(P)
 
     # Créetion du vecteur colonne e = (1, 1, ..., 1), de taille n
     e = np.ones(n).reshape(n, 1)
@@ -59,9 +68,6 @@ def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
     # Calcul de la matrice Google G
     G = alpha * P + (1 - alpha) * e @ vt / n
     print(G)
-
-    # check if G is stochastic
-    print("G est stochastique : ", np.allclose(G.sum(axis=0), np.ones(n)), np.allclose(G.sum(axis=1), np.ones(n)))
 
     # Création du vecteur de probabilité stationnaire x
     x = np.ones(n)

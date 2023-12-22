@@ -5,27 +5,14 @@ import numpy as np
 
 
 class TestPageRank(unittest.TestCase):
-    def test_linear(self):
+    def test_probality_matrix(self):
         """
-        Test the linear method of PageRank.
+        Vérifie que la matrice de probabilité de transition est stochoastique : chaque colonne somme à 1.
         """
-        A = np.loadtxt("data/adjacency_matrix.csv", delimiter=',')
-        alpha = 0.9
-        v = np.loadtxt("data/personalization_vector.csv", delimiter=',')
-        expected = np.array([]) #TODO : Remplir avec le résultat attendu
-        self.assertTrue(np.allclose(pr.pageRankLinear(A, alpha, v), expected))
-
-
-    def test_power(self):
-        """
-        Test the power method of PageRank.
-        """
-        A = np.loadtxt("data/adjacency_matrix.csv", delimiter=',')
-        alpha = 0.9
-        v = np.loadtxt("data/personalization_vector.csv", delimiter=',')
-        expected = np.array([]) #TODO : Remplir avec le résultat attendu
-        self.assertTrue(np.allclose(pr.pageRankPower(A, alpha, v), expected))
-
+        P = np.genfromtxt("data/adjacency_matrix.csv", delimiter=',', skip_header=1)
+        self.assertTrue(np.allclose(pr.probality_matrix(P).sum(axis=0), np.ones(P.shape[0])), 
+                        "La matrice de probabilité de transition n'est pas stochoastique.")
+    
 
 if __name__ == '__main__':
     unittest.main()
