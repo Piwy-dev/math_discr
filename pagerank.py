@@ -10,9 +10,11 @@ def pageRankLinear (A : np.matrix , alpha : float, v : np.array ) -> np.array:
     Retourne le vecteur de probabilité stationnaire du PageRank -> Un vecteur `x` contenant les scores d’importance des noeuds ordonnés dans
     le même ordre que les lignes de la matrice d’adjacence (représentant les noeuds).
     """
-    n = A.shape[0] # Nombre de noeuds
-    x = np.linalg.solve(np.eye(n) - alpha * A, (1 - alpha) * v)
+    n = A.shape[0]
+    I = np.identity(n)
+    P = probality_matrix(A)
 
+    x = np.linalg.solve(I - alpha * P, (1 - alpha) * v)
     return x
 
 
