@@ -41,6 +41,24 @@ def probality_matrix(A: np.matrix) -> np.matrix:
     return P
 
 
+def google_matrix(P: np.matrix, alpha: float) -> np.matrix:
+    """
+    `P` : np.matrix : matrice de probabilité de transition
+    `alpha` : float : paramètre de téléportation (entre 0 et 1)
+
+    Retourne la matrice Google G.
+    """
+    n = P.shape[0] # Nombre de noeuds
+
+    # Créetion du vecteur colonne e = (1, 1, ..., 1), de taille n
+    e = np.ones(n).reshape(n, 1)
+
+    # Calcul de la matrice Google G
+    G = alpha * P + (1 - alpha) * e @ e.T / n
+
+    return G
+
+
 def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
     """
     `A` : np.matrix : matrice d'adjacence
@@ -57,16 +75,8 @@ def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
     P = probality_matrix(A)
     print(P)
 
-    # Créetion du vecteur colonne e = (1, 1, ..., 1), de taille n
-    e = np.ones(n).reshape(n, 1)
-
-    # Transpose v
-    vt = v.reshape(1, n)
-
-    # A cette étape, bien vt @ e = 1 
-
     # Calcul de la matrice Google G
-    G = alpha * P + (1 - alpha) * e @ vt / n
+    G = google_matrix(P, alpha)
     print(G)
 
     # Création du vecteur de probabilité stationnaire x
