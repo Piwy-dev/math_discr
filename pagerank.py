@@ -10,14 +10,8 @@ def pageRankLinear (A : np.matrix , alpha : float, v : np.array ) -> np.array:
     Retourne le vecteur de probabilité stationnaire du PageRank -> Un vecteur `x` contenant les scores d’importance des noeuds ordonnés dans
     le même ordre que les lignes de la matrice d’adjacence (représentant les noeuds).
     """
-    n = A.shape[0]
-    I = np.identity(n)
-
-    # Calculate the transition matrix M
-    M = (1 - alpha) * A + alpha / n * np.ones((n, n))
-
-    # Solve the linear system to find the PageRank vector
-    x = np.linalg.solve(I - M, v)
+    n = A.shape[0] # Nombre de noeuds
+    x = np.linalg.solve(np.eye(n) - alpha * A, (1 - alpha) * v)
 
     return x
 
@@ -69,7 +63,6 @@ def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
     le même ordre que les lignes de la matrice d’adjacence (représentant les noeuds).
     """
     print(A)
-    n = A.shape[0] # Nombre de noeuds
 
     # Calcul de la matrice de probabilité de transition P
     P = probality_matrix(A)
@@ -79,19 +72,9 @@ def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
     G = google_matrix(P, alpha)
     print(G)
 
-    # Création du vecteur de probabilité stationnaire x
-    x = np.ones(n)
+    # Calcul du vecteur de probabilité stationnaire x
+    x = v
+    for i in range(100):
+        x = G @ x
 
-    # Transpose x : vecteur propre de G
-    xT = x.reshape(1, n)
-
-    # Calcul du vecteur de probabilité stationnaire x sur 3 itérations
-    x = np.ones(n).reshape(n, 1)
-    for i in range(3):
-        xT = xT @ G
-
-    # Calcul du vecteur de probabilité stationnaire x sur 1000 itérations
-    for i in range(1000):
-        xT = xT @ G
-
-    return xT.reshape(n, 1)
+    return x
