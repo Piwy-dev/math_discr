@@ -37,6 +37,14 @@ class TestPageRank(unittest.TestCase):
         """
         x = pr.pageRankPower(self.adjacence_matrix, self.alpha, self.personalisation_vertor)
         self.assertTrue(np.allclose(x.sum(), 1), "La méthode pageRankPower ne retourne pas un vecteur de probabilité stationnaire.")
+
+    def test_page_rank_linear_vs_power(self):
+        """
+        Vérifie que les deux méthodes de calcul du PageRank donnent le même résultat.
+        """
+        x_linear = pr.pageRankLinear(self.adjacence_matrix, self.alpha, self.personalisation_vertor)
+        x_power = pr.pageRankPower(self.adjacence_matrix, self.alpha, self.personalisation_vertor)
+        self.assertTrue(np.allclose(x_linear, x_power, atol=0.018), "Les méthodes pageRankLinear et pageRankPower ne donnent pas le même résultat.")
     
 
 if __name__ == '__main__':
