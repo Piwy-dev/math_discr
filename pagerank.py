@@ -72,9 +72,12 @@ def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
     G = google_matrix(P, alpha)
     print(G)
 
-    # Calcul du vecteur de probabilité stationnaire x
+    # Calcul du vecteur de probabilité stationnaire x : calcul de la limite de la suite x_k+1 = G @ x_k
     x = v
     for i in range(100):
+        # Affichage des trois premières itérations
+        if i < 3:
+            print(x)
         x = G @ x
 
     return x
