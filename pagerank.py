@@ -31,7 +31,7 @@ def probality_matrix(A: np.matrix) -> np.matrix:
     for i in range(n):
         for j in range(n):
             if A[i,j] != 0:
-                Lj = A[:,j].sum() # Nombre de liens sortants de j
+                Lj = A[i,:].sum() # Nombre de liens sortants de j
                 P[i,j] = A[i,j] / Lj
 
     return P
