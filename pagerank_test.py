@@ -13,7 +13,7 @@ class TestPageRank(unittest.TestCase):
         Vérifie que la matrice de probabilité de transition est stochastique : chaque colonne somme à 1.
         """
         P = pr.probality_matrix(self.adjacence_matrix)
-        self.assertTrue(np.allclose(pr.probality_matrix(P).sum(axis=0), np.ones(P.shape[0])), 
+        self.assertTrue(np.allclose(pr.probality_matrix(P).sum(axis=1), np.ones(P.shape[0])), 
                         "La matrice de probabilité de transition n'est pas stochastique.")
         
     def test_google_matrix(self):
@@ -21,7 +21,7 @@ class TestPageRank(unittest.TestCase):
         Vérifie que la matrice Google est stochastique : chaque colonne somme à 1.
         """
         P = pr.probality_matrix(self.adjacence_matrix)
-        self.assertTrue(np.allclose(pr.google_matrix(P, self.alpha).sum(axis=0), np.ones(P.shape[0])), 
+        self.assertTrue(np.allclose(pr.google_matrix(P, self.alpha, self.personalisation_vertor).sum(axis=1), np.ones(P.shape[0])), 
                         "La matrice Google n'est pas stochastique.")
         
     def test_page_rank_linear(self):
@@ -44,7 +44,7 @@ class TestPageRank(unittest.TestCase):
         """
         x_linear = pr.pageRankLinear(self.adjacence_matrix, self.alpha, self.personalisation_vertor)
         x_power = pr.pageRankPower(self.adjacence_matrix, self.alpha, self.personalisation_vertor)
-        self.assertTrue(np.allclose(x_linear, x_power, atol=0.018), "Les méthodes pageRankLinear et pageRankPower ne donnent pas le même résultat.")
+        self.assertTrue(np.allclose(x_linear, x_power), "Les méthodes pageRankLinear et pageRankPower ne donnent pas le même résultat.")
     
 
 if __name__ == '__main__':

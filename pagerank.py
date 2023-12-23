@@ -14,7 +14,7 @@ def pageRankLinear (A : np.matrix , alpha : float, v : np.array ) -> np.array:
     I = np.identity(n)
     P = probality_matrix(A)
 
-    x = np.linalg.solve(I - alpha * P, (1 - alpha) * v)
+    x = np.linalg.solve((I - alpha * P).T, (1 - alpha) * v)
     return x
 
 
@@ -27,7 +27,7 @@ def probality_matrix(A: np.matrix) -> np.matrix:
     n = A.shape[0]
     P = np.zeros((n, n))
 
-    # Assignation de p_ij = w_ij / nombre de liens sortants de j
+    # Assignation de p_ij = w_ij / Lj : la probabilité de passer de j à i est égale au poids du lien de j à i divisé par le nombre de liens sortants de j
     for i in range(n):
         for j in range(n):
             if A[i,j] != 0:
@@ -37,10 +37,11 @@ def probality_matrix(A: np.matrix) -> np.matrix:
     return P
 
 
-def google_matrix(P: np.matrix, alpha: float) -> np.matrix:
+def google_matrix(P: np.matrix, alpha: float, v: np.array) -> np.matrix:
     """
     `P` : np.matrix : matrice de probabilité de transition
     `alpha` : float : paramètre de téléportation (entre 0 et 1)
+    `v` : np.array : vecteur de probabilité initiale
 
     Retourne la matrice Google G.
     """
@@ -49,8 +50,11 @@ def google_matrix(P: np.matrix, alpha: float) -> np.matrix:
     # Créetion du vecteur colonne e = (1, 1, ..., 1), de taille n
     e = np.ones(n).reshape(n, 1)
 
+    # Transposition du vecteur de probabilité initiale v
+    vT = v.reshape(1, n) 
+
     # Calcul de la matrice Google G
-    G = alpha * P + (1 - alpha) * e @ e.T / n
+    G = alpha * P + (1 - alpha) * e @ vT
 
     return G
 
@@ -71,15 +75,18 @@ def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
     print(P)
 
     # Calcul de la matrice Google G
-    G = google_matrix(P, alpha)
+    G = google_matrix(P, alpha, v)
     print(G)
 
-    # Calcul du vecteur de probabilité stationnaire x : calcul de la limite de la suite x_k+1 = G @ x_k
-    x = v
+    # Initialisation du vecteur de probabilité stationnaire x par le degré entrant de chaque noeud
+    x = np.array([A[:,i].sum() for i in range(A.shape[0])])
+    x = x / x.sum()
+
+    # Calcul du vecteur de probabilité stationnaire x
     for i in range(100):
-        # Affichage des trois premières itérations
+        # Affiche les trois premières itérations
         if i < 3:
             print(x)
-        x = G @ x
+        x = x @ G
 
     return x
