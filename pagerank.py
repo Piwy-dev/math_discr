@@ -27,7 +27,9 @@ def probality_matrix(A: np.matrix) -> np.matrix:
     n = A.shape[0]
     P = np.zeros((n, n))
 
-    # Assignation de p_ij = w_ij / Lj : la probabilité de passer de j à i est égale au poids du lien de j à i divisé par le nombre de liens sortants de j
+    # Assignation de p_ij = w_ij / Lj :
+    #   la probabilité de passer de j à i est égale au poids du lien de j à i 
+    #   divisé par le nombre de liens sortants de j
     for i in range(n):
         for j in range(n):
             if A[i,j] != 0:
@@ -47,7 +49,7 @@ def google_matrix(P: np.matrix, alpha: float, v: np.array) -> np.matrix:
     """
     n = P.shape[0] # Nombre de noeuds
 
-    # Créetion du vecteur colonne e = (1, 1, ..., 1), de taille n
+    # Créetion du vecteur colonne e = (1, 1, ..., 1)^T, de taille n
     e = np.ones(n).reshape(n, 1)
 
     # Transposition du vecteur de probabilité initiale v
@@ -80,6 +82,8 @@ def pageRankPower (A : np.matrix, alpha : float, v : np.array ) -> np.array:
 
     # Initialisation du vecteur de probabilité stationnaire x par le degré entrant de chaque noeud
     x = np.array([A[:,i].sum() for i in range(A.shape[0])])
+
+    # Normalisation du vecteur de probabilité stationnaire x
     x = x / x.sum()
 
     # Calcul du vecteur de probabilité stationnaire x
